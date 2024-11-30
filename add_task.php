@@ -2,7 +2,9 @@
 require 'vendor/autoload.php'; // Charge le package MongoDB
 
 // Inclure la connexion à la base de données MySQL
-include('db.php');
+session_start();
+include 'db.php';
+include 'mongo.js';
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -10,10 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
 
     // Préparer et exécuter la requête d'insertion dans MySQL
-    $stmt = $pdo->prepare("INSERT INTO tasks (title, description) VALUES (:title, :description)");
+    $stmt = $pdo->prepare("INSERT INTO tasks (username, title, description) VALUES (:username, :title, :description)");
+    $stmt->bindParam(':username', $username);
     $stmt->bindParam(':title', $title);
     $stmt->bindParam(':description', $description);
     $stmt->execute();
+    
 
     // Ajouter une notification via l'API Node.js
     $notificationMessage = "Une nouvelle tâche a été ajoutée : $title";
@@ -32,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     curl_close($ch);
 
     // Redirection vers la page d'accueil pour afficher les tâches
-    header('Location: index.php');
+    header('Location: tasks.php');
     exit();
 }
 ?>

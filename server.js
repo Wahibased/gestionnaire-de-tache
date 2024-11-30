@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const port = 3009;
+const port = 3002;
 
 // Middleware pour parser les données JSON
 app.use(express.json());
@@ -21,8 +21,10 @@ const notificationSchema = new mongoose.Schema({
 
 const Notification = mongoose.model('Notification', notificationSchema);
 
+
+
 // API pour ajouter une notification
-app.post('/add-notification', async (req, res) => {
+app.post('/dd-notification', async (req, res) => {
   const { message } = req.body;
 
   if (!message) {
